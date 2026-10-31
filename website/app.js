@@ -1,10 +1,13 @@
-const capture=(image,caption)=>`<figure class="product-capture"><img src="/assets/${image}" alt="${caption}" loading="lazy"><figcaption>${caption}</figcaption></figure>`;
+const captureCrops={"instance-082.png":{"w":1544,"h":1018,"x":0,"y":0,"cw":1544,"ch":1018},"mods-082.png":{"w":1536,"h":1024,"x":0,"y":1,"cw":1536,"ch":1004},"essentials-082.png":{"w":1542,"h":1020,"x":0,"y":0,"cw":1542,"ch":1020},"banner-082.png":{"w":1530,"h":1028,"x":28,"y":33,"cw":1475,"ch":947},"ingame-082.png":{"w":2550,"h":1436,"x":0,"y":0,"cw":2550,"ch":1436},"profile-082.png":{"w":1671,"h":941,"x":0,"y":0,"cw":1671,"ch":941}};
+const cropStyle=(image)=>{const c=captureCrops[image];return c?`--capture-ratio:${c.cw/c.ch};--image-scale:${c.w/c.cw*100}%;--image-x:${-c.x/c.cw*100}%;--image-y:${-c.y/c.ch*100}%;`:'';};
+const capture=(image,caption)=>`<figure class="product-capture"><button type="button" class="capture-enlarge" style="${cropStyle(image)}" data-enlarge aria-label="Screenshot vergrößern"><img src="/assets/${image}" alt="${caption}" loading="lazy"></button><figcaption>${caption}</figcaption><small class="image-disclosure">Einige Screenshots wurden mit KI bearbeitet, um persönliche Daten zu anonymisieren.</small></figure>`;
 const featureContent = {
- instances:{breadcrumb:"BIBLIOTHEK / INSTANZEN",footer:"Eigene Minecraft-Versionen und getrennte Mods.",html:capture("instance-081.png","Echte Instanzansicht mit neutralen Beispieldaten.")},
- mods:{breadcrumb:"INHALTE / MODRINTH",footer:"Passend zu Minecraft-Version und Modloader.",html:capture("mods-081.png","Mods direkt im Launcher entdecken und installieren.")},
- essentials:{breadcrumb:"INSTANZEN / NIVO ESSENTIALS",footer:"Optionales Mod-Paket und eigene Mod-Presets.",html:capture("essentials-081.png","Nivo Essentials bei der Instanzerstellung auswählen.")},
- banners:{breadcrumb:"PROFIL / BANNER",footer:"Eigene Bilder hochladen. Andere Nivo-Spieler sehen dein Cape.",html:capture("banner-081.png","Lade dein eigenes Bild hoch und trage es als Cape. Alle anderen Spieler mit passendem Nivo Client sehen dein ausgewähltes Banner nach dem automatischen Profilabgleich.")},
- ingame:{breadcrumb:"MINECRAFT / NIVO-MENÜ",footer:"Mit Right Shift öffnen. Fabric 26.3, 26.2 und 1.21.11.",html:capture("ingame-081.png","Das überarbeitete Nivo-Menü direkt im Spiel.")}
+ instances:{breadcrumb:"BIBLIOTHEK / INSTANZEN",footer:"Eigene Minecraft-Versionen und getrennte Mods.",html:capture("instance-082.png","Echte Instanzansicht mit neutralen Beispieldaten.")},
+ mods:{breadcrumb:"INHALTE / MODRINTH",footer:"Passend zu Minecraft-Version und Modloader.",html:capture("mods-082.png","Mods direkt im Launcher entdecken und installieren.")},
+ essentials:{breadcrumb:"INSTANZEN / NIVO ESSENTIALS",footer:"Optionales Mod-Paket und eigene Mod-Presets.",html:capture("essentials-082.png","Nivo Essentials bei der Instanzerstellung auswählen.")},
+ banners:{breadcrumb:"PROFIL / BANNER",footer:"Eigene Bilder hochladen. Andere Nivo-Spieler sehen dein Cape.",html:capture("banner-082.png","Lade dein eigenes Bild hoch und trage es als Cape. Alle anderen Spieler mit passendem Nivo Client sehen dein ausgewähltes Banner nach dem automatischen Profilabgleich.")},
+ profile:{breadcrumb:"MINECRAFT / DEIN NAME",footer:"Name, Chat und Tab-Vorschau mit eigenen Farben.",html:capture("profile-082.png","Namensdesign mit Farbverlauf, Kontur und Schatten anpassen.")},
+ ingame:{breadcrumb:"MINECRAFT / NIVO-MENÜ",footer:"Mit Right Shift öffnen. Fabric 26.3, 26.2 und 1.21.11.",html:capture("ingame-082.png","Das überarbeitete Nivo-Menü direkt im Spiel.")}
 };
 
 const tabs = [...document.querySelectorAll("[data-feature]")];
@@ -166,3 +169,23 @@ if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion
  const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add('reveal-visible');observer.unobserve(entry.target);}},{threshold:.08});
  document.querySelectorAll('.feature-section,.community,.development,#download').forEach(el=>{el.classList.add('reveal-ready');observer.observe(el);});
 }
+
+// Same-page enlargement: no new browser tab and no download navigation.
+const lightbox=document.querySelector('.screenshot-lightbox');
+let screenshotTrigger;
+document.addEventListener('click',event=>{
+ const trigger=event.target.closest('[data-enlarge]');
+ if(!trigger||!lightbox)return;
+ const source=trigger.querySelector('img');if(!source)return;
+ screenshotTrigger=trigger;
+ const frame=lightbox.querySelector('.lightbox-capture');
+ frame.style.cssText=trigger.style.cssText;
+ if(!frame.style.getPropertyValue('--capture-ratio'))frame.style.setProperty('--capture-ratio',String(source.naturalWidth/source.naturalHeight||1.5));
+ lightbox.querySelector('img').src=source.src;
+ lightbox.querySelector('img').alt=source.alt;
+ lightbox.querySelector('p').textContent=source.alt;
+ lightbox.showModal();document.body.style.overflow='hidden';
+});
+lightbox?.querySelector('.lightbox-close').addEventListener('click',()=>lightbox.close());
+lightbox?.addEventListener('click',event=>{if(event.target===lightbox)lightbox.close();});
+lightbox?.addEventListener('close',()=>{document.body.style.overflow='';screenshotTrigger?.focus({preventScroll:true});});

@@ -123,3 +123,22 @@
 .release-overview ul {padding-left:20px;max-width:900px;color:#b0c0d5;line-height:1.8;}.release-overview li {margin:12px 0;}
 @media(max-width:900px){.product-screenshot{width:100%;transform:rotateZ(1deg)}.feature-panel{height:450px;min-height:450px}}
 @media(prefers-reduced-motion:reduce){.product-capture{animation:none}.product-screenshot{transform:none}}
+
+/* 0.8.2: fit each actual capture, with in-page enlargement and clear attribution. */
+.product-screenshot{pointer-events:auto;padding:0;cursor:zoom-in;color:inherit;text-align:inherit;}
+.product-screenshot:hover{transform:rotateY(-7deg) rotateZ(1deg);}
+.image-disclosure{display:block;margin:10px 0 0;color:#8998ac;font-size:11px;line-height:1.6;}
+.feature-panel{height:auto;min-height:610px;}.panel-content{overflow:visible;}
+.product-capture{height:auto;gap:10px;}.capture-enlarge{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;border-radius:12px;overflow:hidden;}
+.product-capture .capture-enlarge img{display:block;width:100%;height:auto;max-height:none;object-fit:initial;flex:initial;border-radius:0;background:none;}
+.product-capture figcaption{margin:0;}.product-capture .image-disclosure{margin:0;}
+.screenshot-lightbox{position:fixed;inset:0;width:min(1500px,96vw);height:fit-content;max-width:96vw;max-height:94vh;padding:44px 14px 14px;background:#0b1019;border:1px solid #ffffff30;border-radius:16px;color:#c5d4e7;box-shadow:0 30px 120px #000b;overflow:auto;}
+.screenshot-lightbox::backdrop{background:#03060de8;backdrop-filter:blur(12px);}
+.screenshot-lightbox img{display:block;width:100%;max-height:calc(90vh - 105px);object-fit:contain;border-radius:9px;}
+.screenshot-lightbox p{font-size:12px;line-height:1.6;margin:12px 4px 0;}.lightbox-close{position:absolute;right:12px;top:7px;width:30px;height:30px;border:0;border-radius:8px;color:white;background:#ffffff14;font-size:24px;cursor:pointer;}
+@media(max-width:900px){.feature-panel{height:auto;min-height:0;}.product-screenshot:hover{transform:rotateZ(1deg);}}
+@media(prefers-reduced-motion:reduce){.product-screenshot:hover{transform:none}}
+
+.capture-enlarge,.lightbox-capture{position:relative;aspect-ratio:var(--capture-ratio,1.5);overflow:hidden;border-radius:12px;}
+.product-capture .capture-enlarge img,.screenshot-lightbox .lightbox-capture img{position:absolute;display:block;left:var(--image-x,0%);top:var(--image-y,0%);width:var(--image-scale,100%);max-width:none;height:auto;max-height:none;margin:0;}
+.lightbox-capture{width:min(100%,calc((90vh - 110px)*var(--capture-ratio,1.5)));margin:0 auto;}
