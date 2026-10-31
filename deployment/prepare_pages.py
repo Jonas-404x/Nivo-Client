@@ -205,7 +205,7 @@ def build(output, payload):
         if source.is_symlink() or any(part.startswith(".") for part in relative_source.parts):
             raise ValueError("Unsupported frontend file")
         if source.is_file():
-            if source.suffix not in {".html", ".css", ".js", ".json", ".webp", ".png", ".svg", ".ico", ".txt"} and source.name not in {"_headers", "_redirects"}:
+            if source.suffix not in {".html", ".css", ".js", ".json", ".webp", ".png", ".svg", ".ico", ".txt", ".xml"} and source.name not in {"_headers", "_redirects"}:
                 raise ValueError("Unexpected frontend file type")
             if source.stat().st_size >= MAX_FILE:
                 raise ValueError("Frontend asset is too large")
