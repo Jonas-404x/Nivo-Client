@@ -2028,3 +2028,8 @@ details[open] > .details-body > .details-body-inner {
     transform: none !important;
   }
 }
+
+/* Primary download action: visible and comfortable on every screen. */
+.hero-actions .button.primary{font-size:16px;min-height:64px;padding:20px 30px;gap:14px;font-weight:700;box-shadow:0 12px 32px rgba(74,137,255,.32)}
+.hero-actions .button.primary svg{width:21px;height:21px}
+@media(max-width:600px){.hero-actions .button.primary{font-size:15px;padding:19px 20px;min-height:62px}}

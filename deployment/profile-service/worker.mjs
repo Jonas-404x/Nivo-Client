@@ -189,7 +189,7 @@ export async function handle(request, env, upstream=fetch) {
 }
 export default {
   async fetch(request,env) {
-    try{return await handle(request,env);}
+    try{if(new URL(request.url).pathname==='/collect'&&env.ADMIN_SERVICE)return await env.ADMIN_SERVICE.fetch(request);return await handle(request,env);}
     catch(e){
       // Never expose SQL, request bodies, challenge values or credentials in error responses.
       const databaseError=!(e instanceof Failure) && /D1|SQLITE|no such table|no such column/i.test(String(e?.message));

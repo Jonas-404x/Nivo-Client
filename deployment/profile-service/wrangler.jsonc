@@ -17,5 +17,11 @@
   ],
   "vars": {
     "STATS_OWNER_UUID": "a69f5d234bd04db8a416d50d6f82baa2"
-  }
+  },
+  "services": [
+    {
+      "binding": "ADMIN_SERVICE",
+      "service": "admin-nivo"
+    }
+  ]
 }

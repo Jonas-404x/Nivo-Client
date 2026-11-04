@@ -251,3 +251,8 @@ lightbox?.addEventListener('close',()=>{
     });
   });
 })();
+
+// Aggregate counters only: no cookies, visitor IDs, page URLs or account data.
+const countSiteEvent=event=>{if(navigator.doNotTrack==='1')return;void fetch('https://nivo-api.jonasneubauer94.workers.dev/collect',{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain'},body:JSON.stringify({event}),keepalive:true}).catch(()=>{});};
+countSiteEvent('pageview');
+document.addEventListener('click',event=>{const link=event.target.closest('a');if(!link)return;if(link.hasAttribute('download'))countSiteEvent('download');else if(/^https:\/\/(discord.gg|discord.com)\//.test(link.href))countSiteEvent('discord');});
