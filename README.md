@@ -1,10 +1,10 @@
 # Nivo Client
 
-Minecraft-Launcher für Mods und Modpacks. Öffentliche Beta **0.8.2** mit direktem Microsoft-Spielstart, großer Live-Konsole, Skin-Sammlung und integrierter Nivo-Core-Mod.
+Minecraft-Launcher für Mods und Modpacks. Öffentliche Beta **0.8.3** mit direktem Microsoft-Spielstart, großer Live-Konsole, Skin-Sammlung und integrierter Nivo-Core-Mod.
 
 - [Nivo Client – Website und aktueller Download](https://nivo-client.de/)
-- [GitHub Releases](https://github.com/Jonaz123187/Nivo-Client/releases)
-- [Nivo Client 0.8.2](https://github.com/Jonaz123187/Nivo-Client/releases/tag/v0.8.2): Controlling in Nivo Essentials, Datenschutzbestätigung, Cape mit echter Tiefe und neue Website-Einblicke mit großer Bildansicht.
+- [GitHub Releases](https://github.com/Jonas-404x/Nivo-Client/releases)
+- [Nivo Client 0.8.3](https://github.com/Jonas-404x/Nivo-Client/releases/tag/v0.8.3): Lokale Startdiagnose, geführte Leistungsmessung, einheitliche Kategorien und korrigierte Schild-/Cape-Darstellung.
 - [Discord: Hilfe, Fehler und Vorschläge](https://discord.gg/YBmWn3EeKz)
 
 ## Öffentlicher Quellstand
@@ -41,7 +41,7 @@ Website-Änderungen auf `main` werden ebenfalls automatisch bereitgestellt. Ohne
 
 Die Website liegt unter **nivo-client.de**. Die bisherige Pages-Adresse bleibt kompatibel. Die alte Startseite leitet dorthin weiter; alte Download- und Update-Adressen bleiben für bereits installierte Launcher erreichbar. Beide Pages-Projekte werden vom selben Workflow aktualisiert.
 
-[Einmalige Einrichtung und Ablauf](deployment/EINRICHTEN.md) · [Veröffentlichungsprüfung](https://github.com/Jonaz123187/Nivo-Client/actions/workflows/publish-website.yml)
+[Einmalige Einrichtung und Ablauf](deployment/EINRICHTEN.md) · [Veröffentlichungsprüfung](https://github.com/Jonas-404x/Nivo-Client/actions/workflows/publish-website.yml)
 
 Der private Signierschlüssel bleibt auf dem Entwickler-PC. Dieser öffentliche Quellstand enthält Website und Veröffentlichungswerkzeuge; keine persönlichen Kontodaten, privaten Schlüssel oder Launcher-Entwicklungsordner.
 

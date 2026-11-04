@@ -21,7 +21,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 ORIGIN = "https://nivo-client.de"
 LEGACY_ORIGIN = "https://cryo-client.pages.dev"
-REPOSITORY = "Jonaz123187/Nivo-Client"
+REPOSITORY = "Jonas-404x/Nivo-Client"
 MAX_FILE = 25 * 1024 * 1024
 MAX_INSTALLER = 128 * 1024 * 1024
 VERSION = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+")
