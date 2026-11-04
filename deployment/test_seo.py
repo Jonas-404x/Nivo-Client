@@ -9,6 +9,12 @@ from test_prepare_pages import payload
 
 ROOT=Path(__file__).resolve().parents[1]/'website'
 class SearchMetadataTests(unittest.TestCase):
+ def test_theme_does_not_depend_on_stale_imports(self):
+  css=(ROOT/'style.css').read_text(encoding='utf8')
+  self.assertNotIn('@import',css)
+  for definition in ('--bg-deep:', '--font-body:', '--font-display:', '@font-face'):
+   self.assertIn(definition,css)
+  self.assertIn('font-family: var(--font-body, "Segoe UI", Arial, sans-serif)',css)
  def test_sitemap_matches_canonical_pages_and_brand(self):
   locations=[e.text for e in ET.parse(ROOT/'sitemap.xml').findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
   expected={'index.html':'https://nivo-client.de/','datenschutz.html':'https://nivo-client.de/datenschutz','nutzungsbedingungen.html':'https://nivo-client.de/nutzungsbedingungen'}
