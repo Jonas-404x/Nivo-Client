@@ -1,1 +1,27 @@
-:root{--bg:#090c12;--text:#edf2fa;--accent:#91bcff;--line:#b8c8e315}
+:root {
+  --bg: #0b0d12;
+  --bg-elevated: #12151c;
+  --bg-deep: #080a0e;
+  --text: #f2f5fa;
+  --text-muted: #9aa6b8;
+  --text-soft: #6f7b8f;
+  --accent: #4a89ff;
+  --accent-strong: #89b4fa;
+  --accent-soft: rgba(74, 137, 255, 0.16);
+  --accent-glow: rgba(74, 137, 255, 0.32);
+  --accent-ink: #f4f8ff;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+  --glass: rgba(15, 17, 22, 0.55);
+  --glass-strong: rgba(22, 26, 34, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.16);
+  --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.4);
+  --shadow-deep: 0 30px 90px rgba(0, 0, 0, 0.55);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --font-display: "Syne", "Segoe UI", sans-serif;
+  --font-body: "Figtree", "Segoe UI", sans-serif;
+  --nav-offset: 110px;
+}

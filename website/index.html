@@ -1,22 +1,22 @@
 <!DOCTYPE html><html lang="de"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#090e18">
+    <meta name="theme-color" content="#0b0d12">
     <title>Nivo Client – Kostenloser Minecraft Launcher</title>
     <link rel="canonical" href="https://nivo-client.de/">
     <meta property="og:url" content="https://nivo-client.de/">
-    <meta name="description" content="Mods suchen, Modpacks importieren und Minecraft-Instanzen verwalten. Lade die aktuelle Windows-Beta von Nivo Client herunter.">
+    <meta name="description" content="Minecraft starten. Mods, Capes und Cosmetics in einem Client. Lade die aktuelle Windows-Beta von Nivo Client herunter.">
     <meta property="og:title" content="Nivo Client – Kostenloser Minecraft Launcher">
-    <meta property="og:description" content="Instanzen, Mods und Modpacks in einer Desktop-App. Minecraft direkt starten, Mods verwalten und das Profil anpassen.">
+    <meta property="og:description" content="Instanzen, Mods, Capes und Cosmetics in einer Desktop-App. Minecraft direkt starten und dein Profil anpassen.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Nivo Client">
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Nivo Client", "alternateName": "Nivo", "url": "https://nivo-client.de/"}</script>
     <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="96x96">
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="/style.css?v=e00e898496f2">
-    <link rel="stylesheet" href="/community.css?v=f8abc737acb4">
-    <script src="/app.js?v=aefa927d68c0" defer=""></script>
-    <link rel="stylesheet" href="/nivo.css?v=81a130f130bd">
+    <link rel="stylesheet" href="/style.css?v=revamp-20261104">
+    <link rel="stylesheet" href="/community.css?v=revamp-20261104">
+    <script src="/app.js?v=revamp-20261104" defer=""></script>
+    <link rel="stylesheet" href="/nivo.css?v=revamp-20261104">
   </head>
   <body>
     <svg class="svg-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -63,7 +63,7 @@
       <nav class="nav" aria-label="Hauptnavigation">
         <a href="#" class="brand" aria-label="Nivo Client Startseite"><img src="/assets/nivo.svg" alt=""><span>NIVO<small>CLIENT</small></span></a>
         <div class="nav-links" id="nav-links">
-          <a href="#einblicke">Funktionen</a><a href="#entwicklung">Entwicklung</a><a href="#fragen">Fragen</a><a class="discord-nav" href="https://discord.gg/YBmWn3EeKz" target="_blank" rel="noreferrer">Discord <svg><use href="#i-community"></use></svg></a><a class="github-nav" href="https://github.com/Jonaz123187/Nivo-Client" target="_blank" rel="noreferrer" aria-label="Nivo auf GitHub"><svg><use href="#i-github"></use></svg></a>
+          <a href="#warum">Warum Nivo</a><a href="#einblicke">Funktionen</a><a href="#entwicklung">Entwicklung</a><a href="#fragen">Fragen</a><a class="discord-nav" href="https://discord.gg/YBmWn3EeKz" target="_blank" rel="noreferrer">Discord <svg><use href="#i-community"></use></svg></a><a class="github-nav" href="https://github.com/Jonaz123187/Nivo-Client" target="_blank" rel="noreferrer" aria-label="Nivo auf GitHub"><svg><use href="#i-github"></use></svg></a>
         </div>
         <a class="nav-download" href="#download">Download <svg><use href="#i-arrow"></use></svg></a>
         <button class="menu-toggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="nav-links">
@@ -78,24 +78,25 @@
         </div>
         <div class="hero-grid wrap">
           <div class="hero-copy">
+            <p class="hero-brand" aria-hidden="true"><img src="/assets/nivo.svg" alt=""><span>NIVO</span></p>
             <a class="eyebrow release-link" href="#entwicklung"><span class="live-dot"></span> WINDOWS-BETA
               <span class="eyebrow-divider"></span>
               <span data-release-version="">0.8.2</span>
               <svg><use href="#i-arrow"></use></svg></a>
             <h1 id="hero-title">
-              Dein Launcher<br><span>für Minecraft.</span>
+              Dein Launcher für Minecraft.<br><span>Mods, Capes und Cosmetics.</span>
             </h1>
             <p class="hero-description">
-              Mods suchen, Modpacks importieren und mehrere Instanzen verwalten.
-              Direkt in Nivo.
+              Melde dich mit Microsoft an, verwalte Instanzen und starte Minecraft
+              direkt mit deinen Mods — in einem Client.
             </p>
             <div class="hero-actions">
               <a class="button primary" href="/downloads/Nivo-Client-Setup.exe" download=""><svg><use href="#i-windows"></use></svg> Für Windows
-                herunterladen <svg><use href="#i-download"></use></svg></a><a class="text-link" href="#einblicke">Funktionen ansehen <svg><use href="#i-arrow"></use></svg></a>
+                herunterladen <svg><use href="#i-download"></use></svg></a><a class="text-link" href="#client">Im Client ansehen <svg><use href="#i-arrow"></use></svg></a>
             </div>
             <p class="hero-note">
               Windows · 64 Bit ·
-              <span>Beta · Direkt mit Microsoft anmelden und spielen</span>
+              <span>Beta · Fabric · Microsoft-Anmeldung</span>
             </p>
           </div>
           <div class="product-stage">
@@ -106,7 +107,7 @@
             </div>
           </div>
         </div>
-        <a class="scroll-cue" href="#einblicke" aria-label="Mehr über Nivo erfahren"><span></span> ENTDECKEN</a>
+        <a class="scroll-cue" href="#warum" aria-label="Mehr über Nivo erfahren"><span></span> ENTDECKEN</a>
       </section>
 
       <section class="intro-strip wrap" aria-label="Nivo auf einen Blick">
@@ -117,6 +118,108 @@
         </p>
         <div class="strip-brands">
           <span>MODRINTH</span><i></i><span>FABRIC</span><i></i><img src="/assets/nivo.svg" alt="Nivo">
+        </div>
+      </section>
+
+      <section class="why-section wrap" id="warum" aria-labelledby="why-title">
+        <div class="section-heading">
+          <span class="section-kicker">WARUM NIVO</span>
+          <h2 id="why-title">Alles für deinen<br><span>Minecraft-Client.</span></h2>
+          <p>
+            Kein separates Tool-Chaos: Launcher, Mods, Capes und Ingame-Menü
+            gehören zusammen — genau wie im Nivo-Fenster.
+          </p>
+        </div>
+        <div class="why-grid">
+          <article class="why-card">
+            <svg><use href="#i-grid"></use></svg>
+            <strong>Instanzen</strong>
+            <p>Survival, Server-Modpack oder Testsetup — jede Instanz behält Version und Mods für sich.</p>
+          </article>
+          <article class="why-card">
+            <svg><use href="#i-cube"></use></svg>
+            <strong>Modrinth</strong>
+            <p>Mods, Modpacks, Shader und Ressourcenpakete suchen und mit Abhängigkeiten installieren.</p>
+          </article>
+          <article class="why-card">
+            <svg><use href="#i-spark"></use></svg>
+            <strong>Capes &amp; Cosmetics</strong>
+            <p>Eigene Banner, Skins und Namensdesigns — sichtbar für andere Spieler mit Nivo Core.</p>
+          </article>
+          <article class="why-card">
+            <svg><use href="#i-check"></use></svg>
+            <strong>Ingame-Menü</strong>
+            <p>HUD, Darstellung und Profil direkt im Spiel anpassen. Mit Right Shift öffnen.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="identity-section wrap" id="client" aria-labelledby="identity-title">
+        <div class="section-heading">
+          <span class="section-kicker">IM CLIENT</span>
+          <h2 id="identity-title">Cape, Name und<br><span>Menü — dein Look.</span></h2>
+          <p>
+            So sieht Nivo aus, wenn du Minecraft spielst: Profil, Cosmetics und
+            das Nivo-Menü gehören zum Client, nicht nur zum Launcher.
+          </p>
+        </div>
+        <div class="identity-grid">
+          <article class="identity-main">
+            <button type="button" data-enlarge aria-label="Namensdesign-Screenshot vergrößern">
+              <img src="/assets/profile-082.png" alt="Namensfarben und Effekte im Nivo-Profilmenü" width="1671" height="941" loading="lazy">
+            </button>
+            <div class="identity-copy">
+              <h3>Namensdesign</h3>
+              <p>Farben, Kontur und Schatten für deinen Namen — mit Live-Vorschau. Andere Nivo-Spieler sehen dein Design im Spiel.</p>
+              <div class="identity-tags">
+                <span class="pill">Farben</span>
+                <span class="pill">Effekte</span>
+                <span class="pill">Vorschau</span>
+              </div>
+            </div>
+          </article>
+          <div class="identity-side">
+            <article class="identity-tile">
+              <button type="button" data-enlarge aria-label="Banner-Screenshot vergrößern">
+                <img src="/assets/banner-082.png" alt="Cape- und Banner-Editor im Nivo Client" width="1530" height="1028" loading="lazy">
+              </button>
+              <div class="identity-copy">
+                <h3>Eigene Capes</h3>
+                <p>Bilder hochladen und als Cape tragen. Andere Nivo-Spieler sehen dein Banner nach dem Profilabgleich.</p>
+              </div>
+            </article>
+            <article class="identity-tile">
+              <button type="button" data-enlarge aria-label="Ingame-Menü vergrößern">
+                <img src="/assets/ingame-082.png" alt="Nivo Ingame-Menü mit HUD- und Profiloptionen" width="2550" height="1436" loading="lazy">
+              </button>
+              <div class="identity-copy">
+                <h3>Nivo Core im Spiel</h3>
+                <p>HUD, Darstellung und Profil direkt im Spiel anpassen. Mit Right Shift öffnen.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="versions-section wrap" id="versionen" aria-labelledby="versions-title">
+        <div class="versions-panel">
+          <div>
+            <span class="section-kicker">BETA</span>
+            <h2 id="versions-title">Noch in Arbeit.<br><span>Schritt für Schritt.</span></h2>
+            <p>
+              Nivo ist in der Beta. Capes, Cosmetics und das Ingame-Menü laufen
+              zuerst über Nivo Core für ausgewählte Fabric-Versionen — weitere
+              folgen. Der Launcher selbst verwaltet schon unterschiedliche Minecraft-Versionen.
+            </p>
+          </div>
+          <div class="version-pills" aria-label="Aktueller Stand">
+            <span class="pill">Windows-Beta</span>
+            <span class="pill">Fabric zuerst</span>
+            <span class="pill">26.3 · 26.2 · 1.21.11</span>
+            <span class="pill">Mehr Versionen geplant</span>
+            <span class="pill">Modrinth</span>
+            <span class="pill">Microsoft Login</span>
+          </div>
         </div>
       </section>
 
@@ -248,9 +351,13 @@
           </div>
           <details class="checksum">
             <summary>Download-Prüfsumme <span>+</span></summary>
-            <p>SHA-256 des unveränderten Installers:</p>
-            <code id="checksum-value">Wird geladen …</code><button id="copy-checksum" type="button">
-              <svg><use href="#i-copy"></use></svg> Prüfsumme kopieren</button><span id="copy-status" role="status" aria-live="polite"></span>
+            <div class="details-body">
+              <div class="details-body-inner">
+                <p>SHA-256 des unveränderten Installers:</p>
+                <code id="checksum-value">Wird geladen …</code><button id="copy-checksum" type="button">
+                  <svg><use href="#i-copy"></use></svg> Prüfsumme kopieren</button><span id="copy-status" role="status" aria-live="polite"></span>
+              </div>
+            </div>
           </details>
         </div>
       </section>
@@ -267,59 +374,71 @@
             <summary>
               Kann ich Minecraft damit schon starten?<span>+</span>
             </summary>
-            <p>
-              Ja. Melde dich mit deinem Microsoft-Konto an, wähle deine Instanz und klicke auf Spielen.
-              Nivo lädt Minecraft, die passende Java-Laufzeit und deine ausgewählten Mods.
-              Nivo Core wird bei Fabric 26.3, 26.2 und 1.21.11 automatisch eingebunden und ist kein separater Download.
-            </p>
+            <div class="details-body"><div class="details-body-inner">
+              <p>
+                Ja. Melde dich mit deinem Microsoft-Konto an, wähle deine Instanz und klicke auf Spielen.
+                Nivo lädt Minecraft, die passende Java-Laufzeit und deine ausgewählten Mods.
+                Nivo Core wird bei Fabric 26.3, 26.2 und 1.21.11 automatisch eingebunden und ist kein separater Download.
+              </p>
+            </div></div>
           </details>
           <details>
             <summary>
               Bekomme ich hier die neueste Version?<span>+</span>
             </summary>
-            <p>
-              Ja. Der kleine Installationsstarter lädt die aktuelle veröffentlichte Version, prüft ihre Update-Signatur und öffnet den Installationsassistenten. Der Starter selbst bleibt bei normalen Updates unverändert. Bereits installierte Launcher aktualisieren sich über den App-Updater.
-            </p>
+            <div class="details-body"><div class="details-body-inner">
+              <p>
+                Ja. Der kleine Installationsstarter lädt die aktuelle veröffentlichte Version, prüft ihre Update-Signatur und öffnet den Installationsassistenten. Der Starter selbst bleibt bei normalen Updates unverändert. Bereits installierte Launcher aktualisieren sich über den App-Updater.
+              </p>
+            </div></div>
           </details>
           <details>
             <summary>Wie installiere ich Nivo?<span>+</span></summary>
-            <p>
-              Lade den Windows-Installer herunter und öffne die Setup-Datei. Der
-              Assistent führt dich durch die Installation. Melde dich danach mit
-              deinem Microsoft-Konto an und starte deine erste Instanz.
-            </p>
+            <div class="details-body"><div class="details-body-inner">
+              <p>
+                Lade den Windows-Installer herunter und öffne die Setup-Datei. Der
+                Assistent führt dich durch die Installation. Melde dich danach mit
+                deinem Microsoft-Konto an und starte deine erste Instanz.
+              </p>
+            </div></div>
           </details>
           <details>
             <summary>
               Was passiert bei der Microsoft-Anmeldung?<span>+</span>
             </summary>
-            <p>
-              Nivo öffnet die offizielle Microsoft-Seite im Browser. Dein
-              Passwort gibst du ausschließlich dort ein. Die App ist
-              von Minecraft für den API-Zugriff freigegeben. Nivo prüft dein
-              Java-Profil und bewahrt die Anmeldung in der Windows-Anmeldeinformationsverwaltung auf.
-            </p>
+            <div class="details-body"><div class="details-body-inner">
+              <p>
+                Nivo öffnet die offizielle Microsoft-Seite im Browser. Dein
+                Passwort gibst du ausschließlich dort ein. Die App ist
+                von Minecraft für den API-Zugriff freigegeben. Nivo prüft dein
+                Java-Profil und bewahrt die Anmeldung in der Windows-Anmeldeinformationsverwaltung auf.
+              </p>
+            </div></div>
           </details>
           <details>
             <summary>Was ist Nivo Essentials?<span>+</span></summary>
-            <p>
-              Eine optionale Auswahl aus Performance- und Komfortmods, darunter
-              Sodium, Iris, Lithium und Fabric API. Bei der Instanzerstellung
-              kannst du das Paket oder einzelne Mods abwählen. Installiert
-              werden passende Versionen und ihre erforderlichen Abhängigkeiten.
-            </p>
+            <div class="details-body"><div class="details-body-inner">
+              <p>
+                Eine optionale Auswahl aus Performance- und Komfortmods, darunter
+                Sodium, Iris, Lithium und Fabric API. Bei der Instanzerstellung
+                kannst du das Paket oder einzelne Mods abwählen. Installiert
+                werden passende Versionen und ihre erforderlichen Abhängigkeiten.
+              </p>
+            </div></div>
           </details>
           <details>
             <summary>Woher kommen die Mods?<span>+</span></summary>
-            <p>
-              Die aktuelle Version nutzt die offizielle Modrinth-API. Du kannst
-              Mods, Modpacks, Shader und Ressourcenpakete suchen und
-              herunterladen. Die Projekte gehören ihren jeweiligen Entwicklern.
-            </p>
+            <div class="details-body"><div class="details-body-inner">
+              <p>
+                Die aktuelle Version nutzt die offizielle Modrinth-API. Du kannst
+                Mods, Modpacks, Shader und Ressourcenpakete suchen und
+                herunterladen. Die Projekte gehören ihren jeweiligen Entwicklern.
+              </p>
+            </div></div>
           </details>
-          <details><summary>Welche Minecraft-Versionen werden unterstützt?<span>+</span></summary><p>Der Launcher verwaltet unterschiedliche Minecraft-Versionen. Die zusätzlichen Nivo-Core-Funktionen gibt es aktuell für Fabric 26.3, 26.2 und 1.21.11. Modrinth-Inhalte werden passend zu Version und Modloader gefiltert.</p></details>
-          <details><summary>Wer sieht meine Capes und Cosmetics?<span>+</span></summary><p>Andere Spieler mit einer passenden Nivo-Core-Version sehen deine synchronisierten Nivo-Capes, Cosmetics und Namensdesigns. Du wählst Capes und Cosmetics im Launcher aus. Ein reiner Vanilla-Client zeigt diese zusätzlichen Designs nicht an.</p></details>
-          <details><summary>Warum zeigt Windows eine SmartScreen-Warnung?<span>+</span></summary><p>Nivo hat derzeit kein kostenpflichtiges Windows-Herausgeberzertifikat. Windows kann deshalb vor einer unbekannten App warnen; das ist nicht automatisch ein Virenfund. Unser unveränderter Installationsstarter kann über die Zeit Reputation sammeln, eine warnungsfreie Installation ist aber nicht garantiert. Lade Nivo nur über unsere offiziellen Links herunter.</p></details>
+          <details><summary>Welche Minecraft-Versionen werden unterstützt?<span>+</span></summary><div class="details-body"><div class="details-body-inner"><p>Der Launcher verwaltet unterschiedliche Minecraft-Versionen. Die zusätzlichen Nivo-Core-Funktionen gibt es aktuell für Fabric 26.3, 26.2 und 1.21.11. Modrinth-Inhalte werden passend zu Version und Modloader gefiltert.</p></div></div></details>
+          <details><summary>Wer sieht meine Capes und Cosmetics?<span>+</span></summary><div class="details-body"><div class="details-body-inner"><p>Andere Spieler mit einer passenden Nivo-Core-Version sehen deine synchronisierten Nivo-Capes, Cosmetics und Namensdesigns. Du wählst Capes und Cosmetics im Launcher aus. Ein reiner Vanilla-Client zeigt diese zusätzlichen Designs nicht an.</p></div></div></details>
+          <details><summary>Warum zeigt Windows eine SmartScreen-Warnung?<span>+</span></summary><div class="details-body"><div class="details-body-inner"><p>Nivo hat derzeit kein kostenpflichtiges Windows-Herausgeberzertifikat. Windows kann deshalb vor einer unbekannten App warnen; das ist nicht automatisch ein Virenfund. Unser unveränderter Installationsstarter kann über die Zeit Reputation sammeln, eine warnungsfreie Installation ist aber nicht garantiert. Lade Nivo nur über unsere offiziellen Links herunter.</p></div></div></details>
         </div>
       </section>
     </main>

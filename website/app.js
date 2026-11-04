@@ -167,25 +167,87 @@ copyButton.addEventListener("click", async () => {
 
 if('IntersectionObserver' in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
  const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add('reveal-visible');observer.unobserve(entry.target);}},{threshold:.08});
- document.querySelectorAll('.feature-section,.community,.development,#download').forEach(el=>{el.classList.add('reveal-ready');observer.observe(el);});
+ document.querySelectorAll('.feature-section,.community,.development,#download,.intro-strip,.faq,.why-section,.identity-section,.versions-section').forEach(el=>{el.classList.add('reveal-ready');observer.observe(el);});
+}
+
+const navShell=document.querySelector('.nav-shell');
+if(navShell){
+  const syncNav=()=>navShell.classList.toggle('is-solid', window.scrollY>24);
+  syncNav();
+  window.addEventListener('scroll', syncNav, {passive:true});
 }
 
 // Same-page enlargement: no new browser tab and no download navigation.
 const lightbox=document.querySelector('.screenshot-lightbox');
 let screenshotTrigger;
+let lightboxScrollY=0;
 document.addEventListener('click',event=>{
  const trigger=event.target.closest('[data-enlarge]');
  if(!trigger||!lightbox)return;
+ event.preventDefault();
  const source=trigger.querySelector('img');if(!source)return;
  screenshotTrigger=trigger;
+ lightboxScrollY=window.scrollY;
  const frame=lightbox.querySelector('.lightbox-capture');
  frame.style.cssText=trigger.style.cssText;
  if(!frame.style.getPropertyValue('--capture-ratio'))frame.style.setProperty('--capture-ratio',String(source.naturalWidth/source.naturalHeight||1.5));
  lightbox.querySelector('img').src=source.src;
  lightbox.querySelector('img').alt=source.alt;
  lightbox.querySelector('p').textContent=source.alt;
- lightbox.showModal();document.body.style.overflow='hidden';
+ lightbox.showModal();
+ document.body.style.overflow='hidden';
+ document.body.style.position='fixed';
+ document.body.style.top=`-${lightboxScrollY}px`;
+ document.body.style.left='0';
+ document.body.style.right='0';
 });
 lightbox?.querySelector('.lightbox-close').addEventListener('click',()=>lightbox.close());
 lightbox?.addEventListener('click',event=>{if(event.target===lightbox)lightbox.close();});
-lightbox?.addEventListener('close',()=>{document.body.style.overflow='';screenshotTrigger?.focus({preventScroll:true});});
+lightbox?.addEventListener('close',()=>{
+ document.body.style.overflow='';
+ document.body.style.position='';
+ document.body.style.top='';
+ document.body.style.left='';
+ document.body.style.right='';
+ window.scrollTo(0,lightboxScrollY);
+ screenshotTrigger?.focus({preventScroll:true});
+});
+
+// Soft accordion open/close for FAQ + checksum (keeps native <details> working).
+(() => {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll(".faq-list details, details.checksum").forEach((details) => {
+    const body = details.querySelector(".details-body");
+    if (!body) return;
+    let animating = false;
+
+    details.addEventListener("click", (event) => {
+      const summary = event.target.closest("summary");
+      if (!summary || !details.contains(summary) || summary.parentElement !== details) return;
+      if (reduceMotion || animating) return;
+      event.preventDefault();
+      animating = true;
+
+      if (details.open) {
+        body.style.gridTemplateRows = "1fr";
+        void body.offsetHeight;
+        body.style.gridTemplateRows = "0fr";
+        window.setTimeout(() => {
+          details.removeAttribute("open");
+          body.style.gridTemplateRows = "";
+          animating = false;
+        }, 280);
+        return;
+      }
+
+      details.setAttribute("open", "");
+      body.style.gridTemplateRows = "0fr";
+      void body.offsetHeight;
+      body.style.gridTemplateRows = "1fr";
+      window.setTimeout(() => {
+        body.style.gridTemplateRows = "";
+        animating = false;
+      }, 280);
+    });
+  });
+})();

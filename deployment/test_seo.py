@@ -29,3 +29,7 @@ class SearchMetadataTests(unittest.TestCase):
    self.assertEqual((output/'sitemap.xml').read_bytes(),(ROOT/'sitemap.xml').read_bytes())
    self.assertEqual((output/'robots.txt').read_bytes(),(ROOT/'robots.txt').read_bytes())
    self.assertIn('rel="canonical"',(output/'index.html').read_text(encoding='utf8'))
+   fonts=list((ROOT/'fonts').glob('*.woff2'))
+   self.assertTrue(fonts, 'The redesigned website needs its self-hosted fonts')
+   for font in fonts:
+    self.assertEqual((output/'fonts'/font.name).read_bytes(),font.read_bytes())
