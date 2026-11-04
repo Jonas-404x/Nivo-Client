@@ -62,6 +62,19 @@ def fetch(url, limit, api=False):
     return data
 
 
+def starter_matches_pin(starter, pinned):
+    if not isinstance(starter, dict):
+        return False
+    normalized = dict(starter)
+    # The same immutable bytes were originally published before the account
+    # rename. Accept only that exact historical URL; all pinned fields still
+    # have to match, including size, version and SHA-256.
+    legacy = pinned["url"].replace("/Jonas-404x/Nivo-Client/", "/Jonaz123187/Nivo-Client/")
+    if normalized.get("url") == legacy:
+        normalized["url"] = pinned["url"]
+    return normalized == pinned
+
+
 def validate_release(manifest, feed, installer, expected_version=None):
     version = manifest.get("version", "")
     if not isinstance(version, str) or not VERSION.fullmatch(version):
@@ -218,7 +231,7 @@ def build(output, payload):
     starter = manifest.get("bootstrap")
     if starter:
         pinned = json.loads((ROOT / "deployment/installer-starter.json").read_text(encoding="utf-8"))
-        if starter != pinned:
+        if not starter_matches_pin(starter, pinned):
             raise ValueError("Installer starter does not match the trusted pin")
         binary = fetch(pinned["url"], MAX_FILE)
         if len(binary) != pinned["bytes"] or hashlib.sha256(binary).hexdigest() != pinned["sha256"]:
