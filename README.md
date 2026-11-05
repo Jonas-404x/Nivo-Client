@@ -1,10 +1,10 @@
 # Nivo Client
 
-Minecraft-Launcher für Mods und Modpacks. Öffentliche Beta **0.8.3** mit direktem Microsoft-Spielstart, großer Live-Konsole, Skin-Sammlung und integrierter Nivo-Core-Mod.
+Minecraft-Launcher für Mods und Modpacks. Öffentliche Beta **0.8.4** mit direktem Microsoft-Spielstart, großer Live-Konsole, Skin-Sammlung und integrierter Nivo-Core-Mod.
 
 - [Nivo Client – Website und aktueller Download](https://nivo-client.de/)
 - [GitHub Releases](https://github.com/Jonas-404x/Nivo-Client/releases)
-- [Nivo Client 0.8.3](https://github.com/Jonas-404x/Nivo-Client/releases/tag/v0.8.3): Lokale Startdiagnose, geführte Leistungsmessung, einheitliche Kategorien und korrigierte Schild-/Cape-Darstellung.
+- [Nivo Client 0.8.4](https://github.com/Jonas-404x/Nivo-Client/releases/tag/v0.8.4): Korrigiertes Logo beim Zoomen und reparierte automatische Online-Kontoprüfung.
 - [Discord: Hilfe, Fehler und Vorschläge](https://discord.gg/YBmWn3EeKz)
 
 ## Öffentlicher Quellstand
@@ -49,7 +49,7 @@ Der private Signierschlüssel bleibt auf dem Entwickler-PC. Dieser öffentliche 
 
 Nivo Client uses its own Microsoft application registration. Mojang has reported approval; Microsoft login and direct launch with Fabric 26.3 have been tested locally. Prism is no longer needed. Standalone Fabric-mod builds remain private. The profile service requires verified Minecraft sessions.
 
-Nivo ist ein unabhängiges Projekt von [Jonaz123187](https://github.com/Jonaz123187) und steht nicht mit Mojang Studios oder Microsoft in Verbindung.
+Nivo ist ein unabhängiges Projekt von [Jonas-404x](https://github.com/Jonas-404x) und steht nicht mit Mojang Studios oder Microsoft in Verbindung.
 
 ## Community-Cosmetics
 
