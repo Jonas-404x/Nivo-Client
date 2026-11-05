@@ -336,6 +336,7 @@
           <p>Windows · 64 Bit · Setup-Installer</p>
           <a class="button primary download-main" href="/downloads/Nivo-Client-Setup.exe" download=""><svg><use href="#i-windows"></use></svg> Nivo herunterladen
             <svg><use href="#i-download"></use></svg></a><span class="download-size" id="download-size">2,5 MB · Version 0.8.4</span>
+          <div class="linux-downloads" hidden aria-label="Weitere Betriebssysteme"></div>
           <div class="release-highlights">
             <h4>Neu in dieser Version</h4>
             <ul id="release-highlights"><li>Controlling ergänzt Nivo Essentials: Tastenbelegungen durchsuchen und Konflikte leichter finden.</li><li>Datenschutz und Nutzungsbedingungen direkt in der Einrichtung lesen und bestätigen.</li><li>Cape mit echter Tiefe, vollständigem Bild und dunkler Innenseite.</li><li>Logo und Modulsuche im Ingame-Menü besser ausgerichtet.</li><li>Neue anonymisierte Website-Screenshots mit vergrößerbarer Ansicht direkt auf der Seite.</li></ul>
@@ -457,4 +458,15 @@
 
 <dialog class="screenshot-lightbox" aria-label="Screenshot in großer Ansicht"><button type="button" class="lightbox-close" aria-label="Große Ansicht schließen">×</button><div class="lightbox-capture"><img alt=""></div><p></p></dialog>
 
+<dialog class="download-notice" aria-labelledby="download-notice-title">
+  <header><div><small>WINDOWS-INSTALLATION</small><h2 id="download-notice-title">Dein Download startet.</h2></div><button type="button" class="download-notice-close" aria-label="Download-Hinweis schließen">×</button></header>
+  <p>Windows kann beim ersten Start „Der Computer wurde durch Windows geschützt“ anzeigen. Nivo besitzt derzeit kein Windows-Herausgeberzertifikat und ist SmartScreen möglicherweise noch nicht ausreichend bekannt. Diese Meldung bedeutet allein nicht, dass ein Virus gefunden wurde.</p>
+  <p>Unser Installationsstarter prüft die Nivo-Update-Signatur vor dem Start des Installers. Diese Prüfung ersetzt kein Windows-Herausgeberzertifikat. Lade Nivo ausschließlich von <strong>nivo-client.de</strong> oder unserem verlinkten GitHub-Repository herunter.</p>
+  <div class="download-notice-steps">
+    <figure><figcaption><span>1</span><div><strong>Weitere Informationen</strong><p>Wenn du der offiziellen Downloadquelle vertraust, öffne in der blauen Meldung „Weitere Informationen“.</p></div></figcaption><img src="/assets/smartscreen-information.png" alt="SmartScreen-Meldung mit dem Link Weitere Informationen" loading="lazy"></figure>
+    <figure><figcaption><span>2</span><div><strong>Trotzdem ausführen</strong><p>Prüfe den Dateinamen. Über „Trotzdem ausführen“ kannst du anschließend die Installation starten.</p></div></figcaption><img src="/assets/smartscreen-run.png" alt="Erweiterte SmartScreen-Meldung mit Nivo-Installer und Trotzdem ausführen" loading="lazy"></figure>
+  </div>
+  <p class="download-notice-footnote">Dies gilt für die abgebildete Warnung zu einer unbekannten App. Bei einer konkreten Schadsoftware-Erkennung oder einem abweichenden Dateinamen führe die Datei nicht aus. Windows-Schutzfunktionen müssen nicht abgeschaltet werden. <a href="https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation" target="_blank" rel="noreferrer">SmartScreen bei Microsoft erklärt ↗</a></p>
+  <footer><button type="button" class="button primary download-notice-cancel">Alles klar</button></footer>
+</dialog>
 </body></html>

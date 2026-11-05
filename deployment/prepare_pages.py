@@ -101,6 +101,41 @@ def validate_release(manifest, feed, installer, expected_version=None):
     return relative
 
 
+def linux_download_routes(manifest, feed):
+    """Only fixed, versioned release assets; never accept arbitrary redirect URLs."""
+    version = manifest.get("version", "")
+    if not isinstance(version, str) or not VERSION.fullmatch(version):
+        raise ValueError("Invalid Linux release version")
+    artifacts = manifest.get("linux", [])
+    if not isinstance(artifacts, list) or len(artifacts) > 2:
+        raise ValueError("Invalid Linux release list")
+    suffixes = {"deb": "amd64.deb", "appimage": "x86_64.AppImage"}
+    routes = {}
+    kinds = set()
+    for item in artifacts:
+        kind = item.get("kind") if isinstance(item, dict) else None
+        if kind not in suffixes or kind in kinds:
+            raise ValueError("Unexpected Linux package type")
+        kinds.add(kind)
+        name = f"Nivo-Client-{version}-{suffixes[kind]}"
+        route = "/downloads/" + name
+        url = f"https://github.com/{REPOSITORY}/releases/download/v{version}/{name}"
+        platform = feed.get("platforms", {}).get("linux-x86_64-" + kind, {})
+        if item.get("file") != route or platform.get("url") != url:
+            raise ValueError("Unexpected Linux download location")
+        size = item.get("bytes")
+        checksum = item.get("sha256")
+        signature = platform.get("signature", "")
+        if not isinstance(size, int) or isinstance(size, bool) or not 1024*1024 <= size <= 512*1024*1024:
+            raise ValueError("Invalid Linux package size")
+        if not isinstance(checksum, str) or not re.fullmatch(r"[a-f0-9]{64}", checksum):
+            raise ValueError("Invalid Linux checksum")
+        if not isinstance(signature, str) or len(signature) > 4096 or not re.fullmatch(r"[A-Za-z0-9+/=]+", signature):
+            raise ValueError("Missing Linux update signature")
+        routes[route] = url
+    return routes
+
+
 def from_archive(data, expected_version=None, installer_fetch=None):
     if len(data) > 64 * 1024 * 1024:
         raise ValueError("Archive is too large")
@@ -269,9 +304,10 @@ def externalize(output):
     url = f"https://github.com/{REPOSITORY}/releases/download/v{version}/Nivo-Client-{version}-Setup.exe"
     redirects = output / "_redirects"
     text = redirects.read_text(encoding="utf-8") if redirects.exists() else ""
-    routes = {"/" + relative, "/downloads/Nivo-Client-Setup.exe"}
+    routes = {"/" + relative: url, "/downloads/Nivo-Client-Setup.exe": starter['url'] if starter else url}
+    routes.update(linux_download_routes(manifest, feed))
     text = "\n".join(line for line in text.splitlines() if not line.split() or line.split()[0] not in routes)
-    redirects.write_text(text.rstrip() + "\n" + "\n".join(f"{route} {starter['url'] if starter and route == '/downloads/Nivo-Client-Setup.exe' else url} 302" for route in sorted(routes)) + "\n", encoding="utf-8")
+    redirects.write_text(text.rstrip() + "\n" + "\n".join(f"{route} {routes[route]} 302" for route in sorted(routes)) + "\n", encoding="utf-8")
     target.unlink()
     stable.unlink()
     for path in output.rglob("*"):

@@ -6,7 +6,7 @@ from unittest import mock
 from pathlib import Path
 import tempfile
 import zipfile
-from prepare_pages import from_archive, render_html, validate_release, externalize, MAX_FILE
+from prepare_pages import from_archive, render_html, validate_release, externalize, MAX_FILE, linux_download_routes
 
 
 def payload():
@@ -26,6 +26,19 @@ def archive(extra=None):
 
 
 class DeploymentTests(unittest.TestCase):
+    def test_linux_downloads_only_redirect_to_matching_versioned_release_assets(self):
+        manifest, feed, _ = payload()
+        name = "Nivo-Client-0.4.1-amd64.deb"
+        manifest["linux"] = [{"kind":"deb", "file":"/downloads/"+name, "sha256":"a"*64, "bytes":2000000}]
+        url = "https://github.com/Jonas-404x/Nivo-Client/releases/download/v0.4.1/"+name
+        feed["platforms"]["linux-x86_64-deb"] = {"url":url,"signature":"YWJjZA=="}
+        self.assertEqual(linux_download_routes(manifest,feed), {"/downloads/"+name:url})
+        feed["platforms"]["linux-x86_64-deb"]["url"] = "https://outside.example/file.deb"
+        with self.assertRaises(ValueError): linux_download_routes(manifest,feed)
+        feed["platforms"]["linux-x86_64-deb"]["url"] = url
+        manifest["linux"].append(manifest["linux"][0].copy())
+        with self.assertRaises(ValueError): linux_download_routes(manifest,feed)
+
     def test_pinned_starter_is_independent_of_versioned_installer(self):
         manifest, feed, installer = payload()
         starter = b"MZ-stable-installer-fixture"

@@ -101,6 +101,25 @@ function refreshRelease() {
       )
         throw new Error("Ungültiger Release");
       release = data;
+      const linuxDownloads = document.querySelector('.linux-downloads');
+      if (linuxDownloads) {
+        linuxDownloads.replaceChildren();
+        const linux = Array.isArray(data.linux) ? data.linux : [];
+        for (const artifact of linux) {
+          const suffix = artifact.kind === 'deb' ? 'amd64.deb' : artifact.kind === 'appimage' ? 'x86_64.AppImage' : null;
+          if (!suffix || artifact.file !== `/downloads/Nivo-Client-${data.version}-${suffix}`) continue;
+          const link = document.createElement('a');
+          link.href = artifact.file;
+          link.textContent = artifact.kind === 'deb' ? 'Linux · Debian / Ubuntu (.deb)' : 'Linux · AppImage';
+          linuxDownloads.append(link);
+        }
+        linuxDownloads.hidden = !linuxDownloads.children.length;
+        if (!linuxDownloads.hidden) {
+          const note = document.createElement('small');
+          note.textContent = 'Linux-Beta · x86_64 · Ubuntu 22.04 / Debian 12 oder neuer';
+          linuxDownloads.append(note);
+        }
+      }
       checksum.textContent = data.bootstrap?.sha256 ?? data.sha256;
       copyButton.disabled = false;
       document.querySelectorAll("[data-release-version]").forEach((node) => {
@@ -142,6 +161,21 @@ for (const link of document.querySelectorAll("a[download]")) {
   link.addEventListener("click", () => {
     void refreshRelease();
   });
+}
+const downloadNotice=document.querySelector('.download-notice');
+let downloadTrigger, downloadPreviousOverflow='';
+if(downloadNotice){
+ document.querySelectorAll('a[download]').forEach(link=>link.addEventListener('click',()=>{
+  if(typeof downloadNotice.showModal!=='function')return;
+  if(downloadNotice.open)return;
+  downloadTrigger=link;downloadPreviousOverflow=document.body.style.overflow;
+  downloadNotice.showModal();document.body.style.overflow='hidden';
+ }));
+ const closeDownload=()=>downloadNotice.close();
+ downloadNotice.querySelector('.download-notice-close').addEventListener('click',closeDownload);
+ downloadNotice.querySelector('.download-notice-cancel').addEventListener('click',closeDownload);
+ downloadNotice.addEventListener('click',event=>{if(event.target===downloadNotice)closeDownload();});
+ downloadNotice.addEventListener('close',()=>{document.body.style.overflow=downloadPreviousOverflow;downloadTrigger?.focus({preventScroll:true});});
 }
 window.addEventListener("focus", () => {
   if (Date.now() - lastCheck > 30000) void refreshRelease();
@@ -255,4 +289,4 @@ lightbox?.addEventListener('close',()=>{
 // Aggregate counters only: no cookies, visitor IDs, page URLs or account data.
 const countSiteEvent=event=>{if(navigator.doNotTrack==='1')return;void fetch('https://nivo-api.jonasneubauer94.workers.dev/collect',{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain'},body:JSON.stringify({event}),keepalive:true}).catch(()=>{});};
 countSiteEvent('pageview');
-document.addEventListener('click',event=>{const link=event.target.closest('a');if(!link)return;if(link.hasAttribute('download'))countSiteEvent('download');else if(/^https:\/\/(discord.gg|discord.com)\//.test(link.href))countSiteEvent('discord');});
+document.addEventListener('click',event=>{const link=event.target.closest('a');if(!link||event.defaultPrevented)return;if(link.hasAttribute('download')||link.closest('.linux-downloads'))countSiteEvent('download');else if(/^https:\/\/(discord.gg|discord.com)\//.test(link.href))countSiteEvent('discord');});
