@@ -187,7 +187,7 @@ function refreshRelease() {
         node.textContent = /^\d+\.\d+\.\d+(?:\.\d+| H[1-9]\d*)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version;
       });
       document.querySelector("#download-size").textContent =
-        `${((data.bootstrap?.bytes ?? data.bytes) / 1024 / 1024).toLocaleString("de-DE", { maximumFractionDigits: 1 })} MB · Version ${/^\d+\.\d+\.\d+(?:\.\d+| H[1-9]\d*)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version}`;
+        `${((data.bootstrap?.bytes ?? data.bytes) / 1024 / 1024).toLocaleString(window.NivoSiteLanguage?.locale??"de-DE", { maximumFractionDigits: 1 })} MB · Version ${/^\d+\.\d+\.\d+(?:\.\d+| H[1-9]\d*)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version}`;
       const list = document.querySelector("#release-highlights");
       const highlights = Array.isArray(data.highlights)
         ? data.highlights
@@ -205,7 +205,7 @@ function refreshRelease() {
       const overview=document.querySelector("#latest-release-notes");
       if(overview)overview.replaceChildren(...highlights.map(text=>{const li=document.createElement("li");li.textContent=text;return li;}));
       const date=document.querySelector("#release-date");
-      if(date&&data.publishedAt&&!Number.isNaN(Date.parse(data.publishedAt)))date.textContent=new Date(data.publishedAt).toLocaleDateString("de-DE",{day:"numeric",month:"long",year:"numeric"});
+      if(date&&data.publishedAt&&!Number.isNaN(Date.parse(data.publishedAt)))date.textContent=new Date(data.publishedAt).toLocaleDateString(window.NivoSiteLanguage?.locale??"de-DE",{day:"numeric",month:"long",year:"numeric"});
     } catch {
       checksum.textContent = "Prüfsumme momentan nicht verfügbar.";
     } finally {

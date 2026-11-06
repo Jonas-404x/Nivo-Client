@@ -1,6 +1,11 @@
 // Public profiles still require a one-use Minecraft session proof; UUID claims alone never authenticate.
 const MAX_BODY = 8192;
 const enc = new TextEncoder();
+export async function moderationSchema(env){
+  await env.DB.prepare("CREATE TABLE IF NOT EXISTS cape_reports(id TEXT PRIMARY KEY,reporter TEXT NOT NULL,target TEXT NOT NULL,hash TEXT NOT NULL,reason TEXT NOT NULL,created INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'open',UNIQUE(reporter,hash))").run();
+  await env.DB.prepare('CREATE TABLE IF NOT EXISTS blocked_banner_assets(hash TEXT PRIMARY KEY,created INTEGER NOT NULL)').run();
+  await env.DB.prepare('CREATE INDEX IF NOT EXISTS cape_reports_reporter_created ON cape_reports(reporter,created)').run();
+}
 export function uuid(value) {
   if (typeof value !== 'string' || !/^(?:[0-9a-f]{32}|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.test(value)) throw new Failure(400, 'invalid_uuid');
   return value.replaceAll('-', '').toLowerCase();
@@ -110,18 +115,19 @@ async function sessionResponse(challenge,env,upstream){
 }
 export async function handle(request, env, upstream=fetch) {
   const path=new URL(request.url).pathname, now=Math.floor(Date.now()/1000);
-  if(path==='/health' && request.method==='GET')return reply({service:'nivo-profiles',version:1,revision:'public-profiles-4',statistics:1,cosmetics:1,registration:env.PRIVATE_TEST==='true'?'private':'minecraft-verified',verifier:env.MINECRAFT_VERIFIER_URL?'supabase':'direct'});
+  if(path==='/health' && request.method==='GET')return reply({service:'nivo-profiles',version:1,revision:'public-profiles-5',statistics:1,cosmetics:1,moderation:1,registration:env.PRIVATE_TEST==='true'?'private':'minecraft-verified',verifier:env.MINECRAFT_VERIFIER_URL?'supabase':'direct'});
   if(/^\/v1\/banners\/[a-f0-9]{64}$/.test(path)&&request.method==='GET'){
     if(!env.DB)throw new Failure(503,'database_not_configured');await rate(request,env,now,path);
     await env.DB.prepare('CREATE TABLE IF NOT EXISTS banner_assets (owner TEXT PRIMARY KEY, hash TEXT NOT NULL, data BLOB NOT NULL)').run();
-    const row=await env.DB.prepare('SELECT data FROM banner_assets WHERE hash=? LIMIT 1').bind(path.split('/').at(-1)).first();
+    await moderationSchema(env);
+    const row=await env.DB.prepare('SELECT data FROM banner_assets WHERE hash=? AND hash NOT IN (SELECT hash FROM blocked_banner_assets) LIMIT 1').bind(path.split('/').at(-1)).first();
     if(!row)throw new Failure(404,'banner_not_found');
     // D1 JSON results represent BLOBs as arrays, which Response would stringify.
     const bytes=row.data instanceof ArrayBuffer?new Uint8Array(row.data):ArrayBuffer.isView(row.data)?new Uint8Array(row.data.buffer,row.data.byteOffset,row.data.byteLength):Array.isArray(row.data)&&row.data.every(v=>Number.isInteger(v)&&v>=0&&v<=255)?new Uint8Array(row.data):null;
     if(!bytes||bytes.byteLength!==491520)throw new Failure(500,'invalid_banner_asset');
     return new Response(bytes,{headers:{'content-type':'application/octet-stream','cache-control':'public, max-age=86400, immutable','x-content-type-options':'nosniff'}});
   }
-  if(!['/v1/challenge','/v1/verify','/v1/presence','/v1/profiles','/v1/logout','/v1/banner','/v1/usage','/v1/stats'].includes(path))throw new Failure(404,'not_found');
+  if(!['/v1/challenge','/v1/verify','/v1/presence','/v1/profiles','/v1/logout','/v1/banner','/v1/usage','/v1/stats','/v1/report'].includes(path))throw new Failure(404,'not_found');
   if(request.method!=='POST')throw new Failure(405,'post_required');
   if(!env.DB)throw new Failure(503,'database_not_configured');
   await rate(request,env,now,path);
@@ -160,19 +166,36 @@ export async function handle(request, env, upstream=fetch) {
     return reply({token,expiresIn:86400});
   }
   const id=await session(request,env,now);
+  if(path==='/v1/report'){
+    await moderationSchema(env);
+    const target=uuid(b.target);
+    if(target===id||!['inappropriate','hate','other'].includes(b.reason)||typeof b.asset!=='string'||!/^[a-f0-9]{64}$/.test(b.asset))throw new Failure(400,'invalid_report');
+    const row=await env.DB.prepare('SELECT hash FROM banner_assets WHERE owner=? AND hash=?').bind(target,b.asset).first();
+    if(!row)throw new Failure(404,'banner_not_found');
+    const recent=await env.DB.prepare('SELECT COUNT(*) AS n FROM cape_reports WHERE reporter=? AND created>?').bind(id,now-86400).first();
+    if(recent.n>=10)throw new Failure(429,'report_limit');
+    await env.DB.prepare('INSERT INTO cape_reports(id,reporter,target,hash,reason,created,status) VALUES(?,?,?,?,?,?,?) ON CONFLICT(reporter,hash) DO NOTHING').bind(crypto.randomUUID(),id,target,b.asset,b.reason,now,'open').run();
+    return reply({ok:true});
+  }
   if(path==='/v1/stats')return reply(await statistics(env,id,now));
   if(path==='/v1/usage'){await recordUsage(env,id,b,now);return reply({ok:true});}
   if(path==='/v1/banner'){
     if(typeof b.pixels!=='string'||!/^[A-Za-z0-9+/]{655360}$/.test(b.pixels))throw new Failure(400,'invalid_banner_pixels');
     const raw=Uint8Array.from(atob(b.pixels),c=>c.charCodeAt(0));if(raw.length!==320*512*3)throw new Failure(400,'invalid_banner_pixels');
     const hash=[...new Uint8Array(await crypto.subtle.digest('SHA-256',raw))].map(b=>b.toString(16).padStart(2,'0')).join('');
+    await moderationSchema(env);
+    if(await env.DB.prepare('SELECT hash FROM blocked_banner_assets WHERE hash=?').bind(hash).first())throw new Failure(403,'banner_blocked');
     await env.DB.prepare('CREATE TABLE IF NOT EXISTS banner_assets (owner TEXT PRIMARY KEY, hash TEXT NOT NULL, data BLOB NOT NULL)').run();
     await env.DB.prepare('INSERT INTO banner_assets(owner,hash,data) VALUES(?,?,?) ON CONFLICT(owner) DO UPDATE SET hash=excluded.hash,data=excluded.data').bind(id,hash,raw.buffer).run();
     return reply({asset:hash,width:320,height:512});
   }
   if(path==='/v1/presence') {
     const p=sanitizeProfile(b.profile);
-    if(p.backBanner==='custom'&&p.backBannerAsset){const row=await env.DB.prepare('SELECT hash FROM banner_assets WHERE owner=? AND hash=?').bind(id,p.backBannerAsset).first();if(!row)throw new Failure(400,'banner_not_owned');}
+    if(p.backBanner==='custom'&&p.backBannerAsset){
+      await moderationSchema(env);
+      if(await env.DB.prepare('SELECT hash FROM blocked_banner_assets WHERE hash=?').bind(p.backBannerAsset).first()){p.backBanner='none';p.backBannerAsset='';}
+      else {const row=await env.DB.prepare('SELECT hash FROM banner_assets WHERE owner=? AND hash=?').bind(id,p.backBannerAsset).first();if(!row)throw new Failure(400,'banner_not_owned');}
+    }
     await env.DB.prepare('INSERT INTO profiles(uuid,profile,seen) VALUES(?,?,?) ON CONFLICT(uuid) DO UPDATE SET profile=excluded.profile,seen=excluded.seen').bind(id,JSON.stringify(p),now).run();
     await env.DB.prepare('UPDATE statistics_peak SET peak=MAX(peak,(SELECT COUNT(*) FROM profiles WHERE seen>?)),sampled=? WHERE id=1 AND sampled<?').bind(now-120,now,now-60).run();
     return reply({ok:true,expiresIn:120});
@@ -198,6 +221,8 @@ export default {
   },
   async scheduled(event,env) {
     const now=Math.floor(Date.now()/1000);
+    await moderationSchema(env);
+    await env.DB.prepare('DELETE FROM cape_reports WHERE created<?').bind(now-90*86400).run();
     await env.DB.batch(['challenges','sessions','limits'].map(t=>env.DB.prepare(`DELETE FROM ${t} WHERE expires<?`).bind(now)).concat([env.DB.prepare('DELETE FROM profiles WHERE seen<?').bind(now-86400),env.DB.prepare('DELETE FROM usage_daily WHERE day<?').bind(new Date((now-35*86400)*1000).toISOString().slice(0,10)),env.DB.prepare('DELETE FROM usage_users WHERE last_seen<?').bind(now-365*86400)]));
   }
 };

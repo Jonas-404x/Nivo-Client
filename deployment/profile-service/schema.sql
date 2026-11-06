@@ -29,3 +29,6 @@ CREATE TABLE IF NOT EXISTS registered_users (user_key TEXT PRIMARY KEY, first_se
 CREATE TABLE IF NOT EXISTS statistics_peak (id INTEGER PRIMARY KEY CHECK(id=1), peak INTEGER NOT NULL DEFAULT 0, sampled INTEGER NOT NULL DEFAULT 0);
 INSERT OR IGNORE INTO statistics_peak(id,peak,sampled) VALUES(1,0,0);
 CREATE INDEX IF NOT EXISTS profiles_seen ON profiles(seen);
+-- Reports contain verified reporter/target IDs, asset hashes and a fixed reason, never chat logs.
+CREATE TABLE IF NOT EXISTS cape_reports(id TEXT PRIMARY KEY,reporter TEXT NOT NULL,target TEXT NOT NULL,hash TEXT NOT NULL,reason TEXT NOT NULL,created INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'open',UNIQUE(reporter,hash));
+CREATE TABLE IF NOT EXISTS blocked_banner_assets(hash TEXT PRIMARY KEY,created INTEGER NOT NULL);
