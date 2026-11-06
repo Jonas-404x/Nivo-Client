@@ -11,18 +11,49 @@ const featureContent = {
 };
 
 const tabs = [...document.querySelectorAll("[data-feature]")];
-function setFeature(tab, focus = false) {
+const featureImages = new Map();
+function prepareFeature(content) {
+  const source = content.html.match(/<img src="([^"]+)"/)?.[1];
+  if (!source) return Promise.resolve(true);
+  if (!featureImages.has(source)) {
+    const image = new Image();
+    image.decoding = "async";
+    image.fetchPriority = "low";
+    const ready = new Promise(resolve => {
+      image.onload = async () => { try { await image.decode?.(); } catch {} resolve(true); };
+      image.onerror = () => { featureImages.delete(source); resolve(false); };
+    });
+    featureImages.set(source, ready);
+    image.src = source;
+  }
+  return featureImages.get(source);
+}
+// Start all six requests on entry, independent of which panel is selected.
+Object.values(featureContent).forEach(content => void prepareFeature(content));
+let activeFeature = null;
+let featureRequest = 0;
+let featureAnimation;
+async function setFeature(tab, focus = false) {
+  if (!tab) return;
   const content = featureContent[tab.dataset.feature];
   if (!content) return;
+  const request = ++featureRequest;
+  if (focus) tab.focus();
+  if (activeFeature === tab.dataset.feature) return;
+  const ready = await prepareFeature(content);
+  if (!ready || request !== featureRequest) return;
+  const changing = activeFeature !== null;
+  activeFeature = tab.dataset.feature;
   tabs.forEach((item) => {
     const selected = item === tab;
     item.classList.toggle("active", selected);
     item.setAttribute("aria-selected", String(selected));
     item.tabIndex = selected ? 0 : -1;
   });
-  document.querySelector("#panel-content").innerHTML = content.html;
-  if (!window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches)
-    document.querySelector("#panel-content").animate?.([{opacity:0,transform:"translateY(10px)"},{opacity:1,transform:"translateY(0)"}],{duration:280,easing:"ease-out"});
+  featureAnimation?.cancel();
+  document.querySelector("#panel-content").innerHTML = content.html.replace('loading="lazy"', 'loading="eager"');
+  if (changing && !window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches)
+    featureAnimation = document.querySelector("#panel-content").animate?.([{opacity:0,transform:"translateY(10px)"},{opacity:1,transform:"translateY(0)"}],{duration:280,easing:"ease-out"});
   document.querySelector("#panel-breadcrumb").textContent = content.breadcrumb;
   document.querySelector("#panel-footer-text").textContent = content.footer;
   document
