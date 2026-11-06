@@ -1494,6 +1494,18 @@ h2 em {
 .linux-downloads:not([hidden]) { display:flex; justify-content:center; flex-wrap:wrap; gap:8px 14px; margin-top:14px; font-size:12px; color:var(--text-muted); }
 .linux-downloads a { color:var(--text-muted); text-underline-offset:3px; }
 .linux-downloads a:hover { color:var(--text); }
+.hero-actions button.linux-choice-button { width:auto; min-height:42px; padding:10px 15px; font-size:12px; color:#fff; background:#203654; border:1px solid #74aaff55; box-shadow:none; }
+.hero-actions .linux-choice-button[hidden] { display:none; }
+.linux-choice-button svg { width:17px; height:17px; }
+.linux-choice-dialog { position:fixed; inset:0; margin:auto; width:min(480px,calc(100vw - 36px)); max-height:85vh; overflow:auto; padding:30px; border:1px solid #789ad044; border-radius:18px; background:#101720; color:#eef3fb; box-shadow:0 24px 100px #0009; }
+.linux-choice-dialog::backdrop { background:#000b; backdrop-filter:blur(8px); }
+.linux-close { position:absolute; top:12px; right:14px; padding:5px 10px; color:#aebed1; background:transparent; border:0; font-size:24px; cursor:pointer; }
+.linux-choice-dialog h2 { margin:0 25px 12px 0; font-size:24px; }
+.linux-choice-dialog p { line-height:1.6; color:#aebed1; font-size:13px; }
+.linux-package-options { display:grid; gap:12px; margin-top:20px; }
+.linux-package { display:grid; gap:7px; padding:16px; background:#19263a; border:1px solid #74aaff55; border-radius:10px; text-decoration:none; color:#edf3fc; }
+.linux-package:hover { background:#243854; }
+.linux-package span,.linux-choice-dialog .linux-note { font-size:12px; color:#aebed1; }
 .linux-downloads small { flex-basis:100%; text-align:center; font-size:11px; }
 
 .download-notice {width:min(850px,calc(100vw - 32px));max-height:min(90dvh,960px);box-sizing:border-box;overflow:auto;border:1px solid var(--line);border-radius:20px;background:#0e141e;color:var(--text);padding:28px;box-shadow:0 28px 100px #0009;font-family:var(--font-body);}

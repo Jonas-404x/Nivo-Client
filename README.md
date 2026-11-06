@@ -1,10 +1,10 @@
 # Nivo Client
 
-Minecraft-Launcher für Mods und Modpacks. Öffentliche Beta **0.8.5** mit direktem Microsoft-Spielstart, Live-Konsole, Skin-Sammlung und integrierter Nivo-Core-Mod. Für Windows 10/11 (x64), zusätzlich als Linux-Beta (x86_64).
+Minecraft-Launcher für Mods und Modpacks. Öffentliche Beta **0.8.6** mit direktem Microsoft-Spielstart, Live-Konsole, Skin-Sammlung und integrierter Nivo-Core-Mod. Für Windows 10/11 (x64), zusätzlich als Linux-Beta (x86_64).
 
 - [Nivo Client – Website und aktueller Download](https://nivo-client.de/)
 - [GitHub Releases](https://github.com/Jonas-404x/Nivo-Client/releases)
-- [Nivo Client 0.8.5](https://github.com/Jonas-404x/Nivo-Client/releases/tag/v0.8.5): Zuverlässiger Launcher-Start, Instanzen kopieren, gemeinsame Spieleinstellungen und HUD-Presets als Datei.
+- [Nivo Client 0.8.6](https://github.com/Jonas-404x/Nivo-Client/releases/tag/v0.8.6): Dunkel-/Hell-/OLED-/System-Design, sechs Akzentfarben, Deutsch/Englisch, verbesserte Einrichtung und sanfte aufklappbare Bereiche.
 - [Discord: Hilfe, Fehler und Vorschläge](https://discord.gg/YBmWn3EeKz)
 
 ## Öffentlicher Quellstand

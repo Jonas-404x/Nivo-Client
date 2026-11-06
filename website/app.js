@@ -101,6 +101,34 @@ function refreshRelease() {
       )
         throw new Error("Ungültiger Release");
       release = data;
+      const linuxChoice = document.querySelector('[data-linux-choice]');
+      const validLinux = (Array.isArray(data.linux) ? data.linux : []).filter(artifact => {
+        const suffix = artifact.kind === 'deb' ? 'amd64.deb' : artifact.kind === 'appimage' ? 'x86_64.AppImage' : null;
+        return suffix && artifact.file === `/downloads/Nivo-Client-${data.version}-${suffix}`;
+      });
+      if (linuxChoice) {
+        linuxChoice.hidden = !validLinux.length;
+        linuxChoice.onclick = () => {
+          let dialog = document.querySelector('.linux-choice-dialog');
+          if (!dialog) {
+            dialog = document.createElement('dialog');
+            dialog.className = 'linux-choice-dialog';
+            dialog.innerHTML = '<button class="linux-close" type="button" aria-label="Schließen">×</button><h2>Nivo für Linux</h2><p>Linux-Beta · 64 Bit (x86_64)<br>Ubuntu 22.04 / Debian 12 oder neuer.</p><div class="linux-package-options"></div><p class="linux-note">Auf einem echten Linux-PC wurde die Microsoft-Anmeldung mit Spielstart noch nicht vollständig getestet.</p>';
+            document.body.append(dialog);
+            dialog.querySelector('.linux-close').onclick = () => dialog.close();
+            dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+          }
+          const options = dialog.querySelector('.linux-package-options');
+          options.replaceChildren();
+          for (const artifact of validLinux) {
+            const link = document.createElement('a'); link.href = artifact.file; link.className = 'linux-package';
+            const title = document.createElement('strong'); title.textContent = artifact.kind === 'deb' ? 'Debian / Ubuntu · .deb' : 'Andere Distributionen · AppImage';
+            const detail = document.createElement('span'); detail.textContent = artifact.kind === 'deb' ? 'Über die Paketverwaltung installieren.' : 'Herunterladen, ausführbar machen und starten. FUSE kann erforderlich sein.';
+            link.append(title, detail); link.addEventListener('click', () => countSiteEvent('download')); options.append(link);
+          }
+          dialog.showModal();
+        };
+      }
       const linuxDownloads = document.querySelector('.linux-downloads');
       if (linuxDownloads) {
         linuxDownloads.replaceChildren();
