@@ -80,7 +80,7 @@ def validate_release(manifest, feed, installer, expected_version=None):
     if not isinstance(version, str) or not VERSION.fullmatch(version):
         raise ValueError("Invalid release version")
     display = manifest.get("displayVersion", version)
-    if not isinstance(display, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+)?", display):
+    if not isinstance(display, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+| H[1-9][0-9]*)?", display):
         raise ValueError("Invalid display version")
     if expected_version and version != expected_version:
         raise ValueError("Release ZIP does not match its GitHub tag")
@@ -106,6 +106,13 @@ def validate_release(manifest, feed, installer, expected_version=None):
 
 def linux_download_routes(manifest, feed):
     """Only fixed, versioned release assets; never accept arbitrary redirect URLs."""
+    retained = manifest.get("retainedLinux")
+    if retained is not None:
+        if manifest.get("linux") or not isinstance(retained, dict) or retained.get("version") == manifest.get("version"):
+            raise ValueError("Invalid retained Linux release")
+        if len(retained.get("artifacts", [])) != 2:
+            raise ValueError("Incomplete retained Linux release")
+        return linux_download_routes({"version": retained.get("version"), "linux": retained.get("artifacts")}, {"platforms": retained.get("platforms", {})})
     version = manifest.get("version", "")
     if not isinstance(version, str) or not VERSION.fullmatch(version):
         raise ValueError("Invalid Linux release version")
@@ -225,7 +232,7 @@ def bootstrap():
 
 def render_html(source, manifest, output):
     version = manifest.get("displayVersion", manifest["version"])
-    if not isinstance(version, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+)?", version):
+    if not isinstance(version, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+| H[1-9][0-9]*)?", version):
         raise ValueError("Invalid display version")
     result = re.sub(r'(<[^>]*\bdata-release-version(?:="[^"]*")?[^>]*>)[^<]*', lambda match: match[1] + version, source)
     display_size = f'{manifest.get("bootstrap", manifest)["bytes"] / 1048576:.1f}'.replace(".", ",")

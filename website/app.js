@@ -101,10 +101,12 @@ function refreshRelease() {
       )
         throw new Error("Ungültiger Release");
       release = data;
+      const linuxVersion = data.linux?.length ? data.version : data.retainedLinux?.version;
+      const linuxArtifacts = data.linux?.length ? data.linux : data.retainedLinux?.artifacts;
       const linuxChoice = document.querySelector('[data-linux-choice]');
-      const validLinux = (Array.isArray(data.linux) ? data.linux : []).filter(artifact => {
+      const validLinux = (/^\d+\.\d+\.\d+$/.test(linuxVersion ?? '') && Array.isArray(linuxArtifacts) ? linuxArtifacts : []).filter(artifact => {
         const suffix = artifact.kind === 'deb' ? 'amd64.deb' : artifact.kind === 'appimage' ? 'x86_64.AppImage' : null;
-        return suffix && artifact.file === `/downloads/Nivo-Client-${data.version}-${suffix}`;
+        return suffix && artifact.file === `/downloads/Nivo-Client-${linuxVersion}-${suffix}`;
       });
       if (linuxChoice) {
         linuxChoice.hidden = !validLinux.length;
@@ -132,10 +134,10 @@ function refreshRelease() {
       const linuxDownloads = document.querySelector('.linux-downloads');
       if (linuxDownloads) {
         linuxDownloads.replaceChildren();
-        const linux = Array.isArray(data.linux) ? data.linux : [];
+        const linux = validLinux;
         for (const artifact of linux) {
           const suffix = artifact.kind === 'deb' ? 'amd64.deb' : artifact.kind === 'appimage' ? 'x86_64.AppImage' : null;
-          if (!suffix || artifact.file !== `/downloads/Nivo-Client-${data.version}-${suffix}`) continue;
+          if (!suffix || artifact.file !== `/downloads/Nivo-Client-${linuxVersion}-${suffix}`) continue;
           const link = document.createElement('a');
           link.href = artifact.file;
           link.textContent = artifact.kind === 'deb' ? 'Linux · Debian / Ubuntu (.deb)' : 'Linux · AppImage';
@@ -144,17 +146,17 @@ function refreshRelease() {
         linuxDownloads.hidden = !linuxDownloads.children.length;
         if (!linuxDownloads.hidden) {
           const note = document.createElement('small');
-          note.textContent = 'Linux-Beta · x86_64 · Ubuntu 22.04 / Debian 12 oder neuer';
+          note.textContent = 'Linux-Beta · x86_64 · Ubuntu 22.04 / Debian 12 oder neuer · Updates bei größeren Veröffentlichungen';
           linuxDownloads.append(note);
         }
       }
       checksum.textContent = data.bootstrap?.sha256 ?? data.sha256;
       copyButton.disabled = false;
       document.querySelectorAll("[data-release-version]").forEach((node) => {
-        node.textContent = /^\d+\.\d+\.\d+(?:\.\d+)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version;
+        node.textContent = /^\d+\.\d+\.\d+(?:\.\d+| H[1-9]\d*)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version;
       });
       document.querySelector("#download-size").textContent =
-        `${((data.bootstrap?.bytes ?? data.bytes) / 1024 / 1024).toLocaleString("de-DE", { maximumFractionDigits: 1 })} MB · Version ${/^\d+\.\d+\.\d+(?:\.\d+)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version}`;
+        `${((data.bootstrap?.bytes ?? data.bytes) / 1024 / 1024).toLocaleString("de-DE", { maximumFractionDigits: 1 })} MB · Version ${/^\d+\.\d+\.\d+(?:\.\d+| H[1-9]\d*)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version}`;
       const list = document.querySelector("#release-highlights");
       const highlights = Array.isArray(data.highlights)
         ? data.highlights

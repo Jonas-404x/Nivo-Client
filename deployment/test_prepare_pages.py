@@ -98,6 +98,32 @@ class DeploymentTests(unittest.TestCase):
 
 
 class ExternalInstallerTests(unittest.TestCase):
+    def test_windows_hotfix_retains_fixed_previous_linux_downloads(self):
+        manifest, feed, _ = payload()
+        version="0.4.0"
+        artifacts=[]
+        platforms={}
+        for kind,suffix in [("deb","amd64.deb"),("appimage","x86_64.AppImage")]:
+            name=f"Nivo-Client-{version}-{suffix}"
+            artifacts.append({"kind":kind,"file":"/downloads/"+name,"sha256":"a"*64,"bytes":2000000})
+            platforms["linux-x86_64-"+kind]={"url":f"https://github.com/Jonas-404x/Nivo-Client/releases/download/v{version}/{name}","signature":"YWJjZA=="}
+        manifest["retainedLinux"]={"version":version,"artifacts":artifacts,"platforms":platforms}
+        self.assertEqual(len(linux_download_routes(manifest,feed)),2)
+        platforms["linux-x86_64-deb"]["url"]="https://outside.example/file.deb"
+        with self.assertRaises(ValueError): linux_download_routes(manifest,feed)
+
+    def test_hotfix_label_keeps_the_signed_semver_identity(self):
+        manifest, feed, installer = payload()
+        manifest["displayVersion"] = "0.8.6 H2"
+        validate_release(manifest, feed, installer)
+        with tempfile.TemporaryDirectory() as directory:
+            result = render_html('<b data-release-version>old</b>', manifest, Path(directory))
+        self.assertIn('>0.8.6 H2', result)
+        self.assertEqual(manifest["version"], "0.4.1")
+        for invalid in ["0.8.6 H0", "0.8.6 H<script>", "0.8.6 H2 extra"]:
+            manifest["displayVersion"] = invalid
+            with self.assertRaises(ValueError): validate_release(manifest, feed, installer)
+
     def test_display_version_does_not_change_signed_package_identity(self):
         manifest, feed, installer = payload()
         original = manifest["version"]
