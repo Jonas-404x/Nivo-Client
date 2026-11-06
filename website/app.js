@@ -151,10 +151,10 @@ function refreshRelease() {
       checksum.textContent = data.bootstrap?.sha256 ?? data.sha256;
       copyButton.disabled = false;
       document.querySelectorAll("[data-release-version]").forEach((node) => {
-        node.textContent = data.version;
+        node.textContent = /^\d+\.\d+\.\d+(?:\.\d+)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version;
       });
       document.querySelector("#download-size").textContent =
-        `${((data.bootstrap?.bytes ?? data.bytes) / 1024 / 1024).toLocaleString("de-DE", { maximumFractionDigits: 1 })} MB · Version ${data.version}`;
+        `${((data.bootstrap?.bytes ?? data.bytes) / 1024 / 1024).toLocaleString("de-DE", { maximumFractionDigits: 1 })} MB · Version ${/^\d+\.\d+\.\d+(?:\.\d+)?$/.test(data.displayVersion ?? '') ? data.displayVersion : data.version}`;
       const list = document.querySelector("#release-highlights");
       const highlights = Array.isArray(data.highlights)
         ? data.highlights

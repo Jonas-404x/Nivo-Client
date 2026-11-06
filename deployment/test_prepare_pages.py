@@ -98,6 +98,19 @@ class DeploymentTests(unittest.TestCase):
 
 
 class ExternalInstallerTests(unittest.TestCase):
+    def test_display_version_does_not_change_signed_package_identity(self):
+        manifest, feed, installer = payload()
+        original = manifest["version"]
+        manifest["displayVersion"] = "0.8.6.1"
+        validate_release(manifest, feed, installer)
+        with tempfile.TemporaryDirectory() as directory:
+            result = render_html('<b data-release-version>old</b>', manifest, Path(directory))
+        self.assertIn('>0.8.6.1', result)
+        self.assertEqual(manifest["version"], original)
+        manifest["displayVersion"] = '<img src=x onerror=alert(1)>'
+        with self.assertRaises(ValueError):
+            validate_release(manifest, feed, installer)
+
     def metadata_archive(self):
         manifest, feed, installer = payload()
         data = io.BytesIO()

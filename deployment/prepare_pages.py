@@ -79,6 +79,9 @@ def validate_release(manifest, feed, installer, expected_version=None):
     version = manifest.get("version", "")
     if not isinstance(version, str) or not VERSION.fullmatch(version):
         raise ValueError("Invalid release version")
+    display = manifest.get("displayVersion", version)
+    if not isinstance(display, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+)?", display):
+        raise ValueError("Invalid display version")
     if expected_version and version != expected_version:
         raise ValueError("Release ZIP does not match its GitHub tag")
     relative = f"downloads/Nivo-Client-{version}-Setup.exe"
@@ -221,7 +224,9 @@ def bootstrap():
 
 
 def render_html(source, manifest, output):
-    version = manifest["version"]
+    version = manifest.get("displayVersion", manifest["version"])
+    if not isinstance(version, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+)?", version):
+        raise ValueError("Invalid display version")
     result = re.sub(r'(<[^>]*\bdata-release-version(?:="[^"]*")?[^>]*>)[^<]*', lambda match: match[1] + version, source)
     display_size = f'{manifest.get("bootstrap", manifest)["bytes"] / 1048576:.1f}'.replace(".", ",")
     result = re.sub(r'(<[^>]*\bid="download-size"[^>]*>)[^<]*', lambda match: match[1] + f"{display_size} MB · Version {version}", result)
