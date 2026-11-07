@@ -54,3 +54,39 @@ window.NivoLegalTranslations.push(...[
     "Website in German and English with automatic language selection and a manual switch."
   ]
 ]);
+
+// H4 release translations
+window.NivoLegalTranslations.push(...[
+  [
+    "Wichtig: Der Update-Schlüssel wurde erneuert. Bitte dieses Update einmalig manuell von nivo-client.de installieren.",
+    "Important: the update key was renewed. Please install this update once manually from nivo-client.de."
+  ],
+  [
+    "Mod-Updates werden schneller geprüft und direkt in der Instanz angezeigt.",
+    "Mod updates are checked faster and shown directly in the instance."
+  ],
+  [
+    "Instanzen als Modrinth-Modpack (.mrpack) exportieren.",
+    "Export instances as Modrinth modpacks (.mrpack)."
+  ],
+  [
+    "Bessere Modsuche mit Sortierung, Kategorien und Client-Filter.",
+    "Better mod search with sorting, categories and a client-side filter."
+  ],
+  [
+    "RAM-Empfehlung pro Instanz passend zu deinem PC.",
+    "RAM recommendation per instance, matched to your PC."
+  ],
+  [
+    "Fehlerhilfe mit konkreten Lösungen, etwa bei fehlenden Abhängigkeiten.",
+    "Troubleshooting with concrete fixes, for example for missing dependencies."
+  ],
+  [
+    "Klarere Import- und Export-Funktionen, funktionierender Export und Meistgespielt-Anzeige.",
+    "Clearer import and export, a working export and a most-played display."
+  ],
+  [
+    "Ingame zeigt das Nivo-Menü wieder die Launcher-Version.",
+    "The in-game Nivo menu shows the launcher version again."
+  ]
+]);
